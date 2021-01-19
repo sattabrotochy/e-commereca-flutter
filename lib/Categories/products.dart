@@ -8,6 +8,7 @@ class Products extends StatefulWidget {
 }
 
 class _ProductsState extends State<Products> {
+  // ignore: non_constant_identifier_names
   var product_list = [
     {
       'id':'1',

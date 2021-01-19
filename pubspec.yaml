@@ -29,6 +29,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.1
   carousel_pro: ^1.0.0
+  http: ^0.12.2
 
 
 

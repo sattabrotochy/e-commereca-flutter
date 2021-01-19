@@ -1,10 +1,16 @@
-import 'package:carousel_pro/carousel_pro.dart';
+import 'dart:convert';
 import 'package:e_commerceapp/Categories/cart.dart';
-import 'package:e_commerceapp/Categories/categories.dart';
 import 'package:e_commerceapp/Categories/horizontal.dart';
 import 'package:e_commerceapp/Categories/products.dart';
+import 'package:e_commerceapp/Services/service.dart';
+import 'package:e_commerceapp/widget/carousel%20_slider.dart';
 import 'package:flutter/material.dart';
 import './Categories/horizontal.dart';
+
+
+import 'package:http/http.dart' as http;
+
+import 'Categories/model/model.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -19,30 +25,37 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Widget image_All = new Container(
-    height: 200,
-    child: Carousel(
-      boxFit: BoxFit.cover,
-      indicatorBgPadding: 10.0,
-      images: [
-        NetworkImage(
-            'https://cdn2.momjunction.com/wp-content/uploads/2015/01/How-To-Wash-Baby-Clothes.jpg'),
-        NetworkImage(
-            'https://www.babycouture.in/blog/wp-content/uploads/2015/10/8126446_orig.jpg'),
-        NetworkImage(
-            'https://m.media-amazon.com/images/G/31/img19/Fashion/WA19/DressStore_Sobe/updates/a-line._SS680_QL85_.jpg'),
-        NetworkImage(
-            'https://image.shutterstock.com/image-photo/handsome-casual-man-standing-arms-260nw-485380684.jpg'),
-        NetworkImage(
-            'https://images-na.ssl-images-amazon.com/images/I/711O4p6EYIL._UX569_.jpg'),
-      ],
-      autoplay: true,
-      animationCurve: Curves.fastOutSlowIn,
-      animationDuration: Duration(milliseconds: 1000),
-      dotSize: 5.0,
-      dotColor: Colors.redAccent,
-    ),
-  );
+  var item=[];
+  @override
+  initState()
+  {
+    super.initState();
+    getAllSlider();
+  }
+
+  SliderService _sliderService=SliderService();
+
+
+  getAllSlider()async{
+    var sliders=await _sliderService.getSlider();
+    var result=json.decode(sliders.body);
+
+   setState(() {
+     try{
+       result['AllPost'].forEach((data){
+         item.add(NetworkImage(data['image']));
+       });
+     }
+     catch(error)
+     {
+       print(error.toString());
+     }
+
+   });
+    print(item);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +180,7 @@ class _MyAppState extends State<MyApp> {
       ),
       body: ListView(
         children: [
-          image_All,
+          carouselSlider(item),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
